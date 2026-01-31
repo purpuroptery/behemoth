@@ -50,7 +50,7 @@ class NamedOwnedModel(NamedModel):
         unique_together = ("creator", "name")
         
         
-class VerifiedModel(models.Model):
+class VerifiedModel(BaseModel):
     verified = models.BooleanField(default=False)
     
     class Meta:

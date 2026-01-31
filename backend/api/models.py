@@ -50,12 +50,16 @@ class NamedOwnedModel(NamedModel):
         unique_together = ("creator", "name")
         
         
+class VerifiedModel(models.Model):
+    verified = models.BooleanField(default=False)
+    
+    class Meta:
+        abstract = True
 """
 application models
 """
     
-class User(UsernamedModel):
-    verified = models.BooleanField(default=False)
+class User(UsernamedModel, VerifiedModel):
     trusted = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
     
@@ -91,7 +95,7 @@ class Hole(NamedModel):
 class Pin(NamedModel):
     hole = models.ForeignKey(Hole, on_delete=models.CASCADE, related_name="pins")
     
-class Setup(NamedOwnedModel):
+class Setup(NamedOwnedModel, VerifiedModel):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="setups")
     
     hole = models.ForeignKey(Hole, on_delete=models.CASCADE, related_name="setups")
@@ -105,7 +109,7 @@ class Setup(NamedOwnedModel):
     video_url = models.URLField(blank=True, null=True)
     time = models.IntegerField(blank=True, null=True)  # time in ms
 
-class SetupGroup(NamedOwnedModel): 
+class SetupGroup(NamedOwnedModel, VerifiedModel):
     setups = models.ManyToManyField(Setup, related_name="groups", blank=True)
     
 class SetupSheet(NamedOwnedModel):
